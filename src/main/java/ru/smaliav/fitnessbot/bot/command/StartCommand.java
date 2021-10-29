@@ -1,12 +1,14 @@
-package ru.smaliav.fitnessbot.command;
+package ru.smaliav.fitnessbot.bot.command;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.util.Utils;
 
 @Slf4j
+@Component
 public class StartCommand extends BaseInfoCommand {
 
     private static final String ID = "start";

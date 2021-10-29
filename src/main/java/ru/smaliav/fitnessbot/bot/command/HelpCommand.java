@@ -1,10 +1,12 @@
-package ru.smaliav.fitnessbot.command;
+package ru.smaliav.fitnessbot.bot.command;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.util.Utils;
 
+@Component
 public class HelpCommand extends BaseInfoCommand {
 
     private static final String ID = "help";
