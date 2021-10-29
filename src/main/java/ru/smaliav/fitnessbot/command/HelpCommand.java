@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.util.Utils;
 
-public class HelpCommand extends InfoCommand {
+public class HelpCommand extends BaseInfoCommand {
 
     private static final String ID = "help";
     private static final String DESCRIPTION = "Shows possible commands";

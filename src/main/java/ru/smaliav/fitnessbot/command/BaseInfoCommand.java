@@ -7,9 +7,9 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
-public abstract class InfoCommand extends BotCommand {
+public abstract class BaseInfoCommand extends BotCommand {
 
-    public InfoCommand(String commandId, String description) {
+    public BaseInfoCommand(String commandId, String description) {
         super(commandId, description);
     }
 

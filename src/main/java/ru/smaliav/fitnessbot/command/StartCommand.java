@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.util.Utils;
 
 @Slf4j
-public class StartCommand extends InfoCommand {
+public class StartCommand extends BaseInfoCommand {
 
     private static final String ID = "start";
     private static final String DESCRIPTION = "Starts a chat with Fitness Bot";
