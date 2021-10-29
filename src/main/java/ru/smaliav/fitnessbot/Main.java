@@ -17,7 +17,7 @@ public class Main {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new FitnessBot(env.get("BOT_NAME"), env.get("BOT_TOKEN")));
         } catch (TelegramApiException e) {
-            log.error("Error occurred while registering Fitness Bot", e);
+            log.error("Error occurred in Fitness Bot", e);
         }
     }
 

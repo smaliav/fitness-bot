@@ -1,21 +1,20 @@
 package ru.smaliav.fitnessbot.command;
 
-import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.util.Utils;
 
-@Slf4j
-public class StartCommand extends InfoCommand {
+public class HelpCommand extends InfoCommand {
 
-    private static final String ID = "start";
-    private static final String DESCRIPTION = "Starts a chat with Fitness Bot";
+    private static final String ID = "help";
+    private static final String DESCRIPTION = "Shows possible commands";
     private static final String TEXT = """
-            Привет, это Фитнес Бот! Тут ты можешь ставить чекпоинты и следить за своим весом.
-            Для большей информации воспользуйся командой /help""";
+            На данный момент доступен следующий набор команд:
+            /start - начинает диалог с Фитнес Ботом
+            /help - выводит сообщение, которое вы сейчас видите""";
 
-    public StartCommand() {
+    public HelpCommand() {
         super(ID, DESCRIPTION);
     }
 
