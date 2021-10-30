@@ -39,12 +39,13 @@ public class UserDao {
         return query.getResultList();
     }
 
-    // TODO smaliy-av Implement saveOrUpdate
-    public void saveUser(UserEntity entity) {
+    // TODO smaliy-av Implement parent DAO
+    public UserEntity saveOrUpdateUser(UserEntity entity) {
         if (entity.getId() == null) {
             em.persist(entity);
+            return entity;
         } else {
-            em.merge(entity);
+            return em.merge(entity);
         }
     }
 

@@ -22,7 +22,7 @@ public class UserService {
     }
 
     @Transactional
-    public void registerIfNotExist(User tUser, Chat chat) {
+    public FitnessUser registerOrUpdate(User tUser, Chat chat) {
         FitnessUser fUser = userRepository.getUserByTelegramId(tUser.getId());
 
         if (fUser != null) {
@@ -31,7 +31,7 @@ public class UserService {
             fUser = registerUser(tUser, chat);
         }
 
-        userRepository.saveUser(fUser);
+        return userRepository.saveOrUpdateUser(fUser);
     }
 
     private void updateUserInfo(User tUser, Chat chat, FitnessUser fUser) {

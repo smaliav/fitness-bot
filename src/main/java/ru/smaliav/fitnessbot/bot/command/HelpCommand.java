@@ -1,10 +1,13 @@
 package ru.smaliav.fitnessbot.bot.command;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
-import ru.smaliav.fitnessbot.util.Utils;
+import ru.smaliav.fitnessbot.business.object.FitnessUser;
+import ru.smaliav.fitnessbot.business.service.StatsService;
+import ru.smaliav.fitnessbot.business.service.UserService;
 
 @Component
 public class HelpCommand extends BaseInfoCommand {
@@ -16,16 +19,18 @@ public class HelpCommand extends BaseInfoCommand {
             /start - начинает диалог с Фитнес Ботом
             /help - выводит сообщение, которое вы сейчас видите""";
 
-    public HelpCommand() {
-        super(ID, DESCRIPTION);
+    private final UserService userService;
+
+    @Autowired
+    public HelpCommand(UserService userService, StatsService statsService) {
+        super(ID, DESCRIPTION, statsService);
+        this.userService = userService;
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        String chatId = chat.getId().toString();
-        String userName = Utils.extractUserName(user);
-
-        sendMessage(absSender, userName, chatId, ID, TEXT);
+        FitnessUser fitnessUser = userService.registerOrUpdate(user, chat);
+        sendMessage(absSender, fitnessUser, ID, TEXT);
     }
 
 }

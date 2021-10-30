@@ -30,9 +30,10 @@ public class UserRepository {
         return userDao.getUsers();
     }
 
-    public void saveUser(FitnessUser fUser) {
+    public FitnessUser saveOrUpdateUser(FitnessUser fUser) {
         UserEntity entity = userMapper.b2e(fUser);
-        userDao.saveUser(entity);
+        entity = userDao.saveOrUpdateUser(entity);
+        return userMapper.e2b(entity);
     }
 
 }

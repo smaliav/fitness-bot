@@ -7,6 +7,7 @@ import ru.smaliav.fitnessbot.repository.entity.core.ModifiedCreatedEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter @Setter
 @Entity
@@ -27,5 +28,8 @@ public class UserEntity extends ModifiedCreatedEntity {
 
     @Column(name = "chat_id")
     private Long chatId;
+
+    @Column(name = "last_used")
+    private LocalDateTime lastUsed;
 
 }
