@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
+import ru.smaliav.fitnessbot.bot.command.core.BaseInfoCommand;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;

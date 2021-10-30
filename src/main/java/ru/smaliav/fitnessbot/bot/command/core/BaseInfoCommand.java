@@ -1,10 +1,9 @@
-package ru.smaliav.fitnessbot.bot.command;
+package ru.smaliav.fitnessbot.bot.command.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.smaliav.fitnessbot.bot.command.core.BaseCommand;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.util.Utils;
@@ -16,7 +15,7 @@ public abstract class BaseInfoCommand extends BaseCommand {
         super(commandId, description, statsService);
     }
 
-    void sendMessage(AbsSender absSender, FitnessUser fUser, String commandName, String text) {
+    protected void sendMessage(AbsSender absSender, FitnessUser fUser, String commandName, String text) {
         String userName = Utils.extractUserName(fUser);
         log.info("Processing - User: {}, Command: {}", userName, commandName);
 
