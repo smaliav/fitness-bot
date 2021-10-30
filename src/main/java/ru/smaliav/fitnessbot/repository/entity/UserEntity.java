@@ -13,6 +13,9 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class UserEntity extends ModifiedCreatedEntity {
 
+    @Column(name = "t_id")
+    private Long telegramId;
+
     @Column(name = "nickname")
     private String nickname;
 
