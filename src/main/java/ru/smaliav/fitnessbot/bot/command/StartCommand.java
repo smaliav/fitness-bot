@@ -30,9 +30,9 @@ public class StartCommand extends BaseInfoCommand {
     }
 
     @Override
-    public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        FitnessUser fUser = userService.registerOrUpdate(user, chat);
-        sendMessage(absSender, fUser, ID, TEXT);
+    public void execute(AbsSender absSender, User user, Chat chat, String[] args) {
+        FitnessUser fitnessUser = userService.registerOrUpdate(user, chat);
+        sendMessage(absSender, fitnessUser, ID, args, TEXT);
     }
 
 }

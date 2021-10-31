@@ -26,6 +26,7 @@ public class FitnessBot extends TelegramLongPollingCommandBot {
 
         register(commandStore.getStartCommand());
         register(commandStore.getHelpCommand());
+        register(commandStore.getWeightCommand());
     }
 
     @Override

@@ -60,13 +60,15 @@ public class UserService {
 
     private FitnessUser registerUser(User tUser, Chat chat) {
         FitnessUser fUser = new FitnessUser();
+        LocalDateTime now = LocalDateTime.now();
 
         fUser.setTelegramId(tUser.getId());
         fUser.setNickname(tUser.getUserName());
         fUser.setFirstName(tUser.getFirstName());
         fUser.setSecondName(tUser.getLastName());
         fUser.setChatId(chat.getId());
-        fUser.setCreated(LocalDateTime.now());
+        fUser.setCreated(now);
+        fUser.setLastUsed(now);
 
         return fUser;
     }

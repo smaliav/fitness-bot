@@ -10,14 +10,17 @@ public class CommandStore {
 
     private final StartCommand startCommand;
     private final HelpCommand helpCommand;
+    private final WeightCommand weightCommand;
 
     @Autowired
     public CommandStore(
             StartCommand startCommand,
-            HelpCommand helpCommand
+            HelpCommand helpCommand,
+            WeightCommand weightCommand
     ) {
         this.startCommand = startCommand;
         this.helpCommand = helpCommand;
+        this.weightCommand = weightCommand;
     }
 
 }

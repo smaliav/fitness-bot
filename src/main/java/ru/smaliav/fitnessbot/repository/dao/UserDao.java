@@ -40,7 +40,7 @@ public class UserDao {
     }
 
     // TODO smaliy-av Implement parent DAO
-    public UserEntity saveOrUpdateUser(UserEntity entity) {
+    public UserEntity saveOrUpdate(UserEntity entity) {
         if (entity.getId() == null) {
             em.persist(entity);
             return entity;

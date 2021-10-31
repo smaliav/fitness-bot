@@ -32,7 +32,7 @@ public class UserRepository {
 
     public FitnessUser saveOrUpdateUser(FitnessUser fUser) {
         UserEntity entity = userMapper.b2e(fUser);
-        entity = userDao.saveOrUpdateUser(entity);
+        entity = userDao.saveOrUpdate(entity);
         return userMapper.e2b(entity);
     }
 
