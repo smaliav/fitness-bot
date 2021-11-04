@@ -6,7 +6,7 @@
 
     <groupId>ru.smaliav</groupId>
     <artifactId>fitness-bot</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
     <name>Fitness Bot</name>
     <description>Telegram Bot for your Fitness progress</description>
@@ -24,6 +24,7 @@
         <telegrambots.version>5.3.0</telegrambots.version>
         <lombok.version>1.18.22</lombok.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <jfree.chart.version>1.5.3</jfree.chart.version>
 
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
     </properties>
@@ -68,6 +69,12 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>${jfree.chart.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,8 @@
 target
 
+# Temporary dir to save user charts
+charts
+
 # IntelliJ IDEA
 .idea
 *.iml

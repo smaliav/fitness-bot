@@ -1,8 +1,9 @@
-package ru.smaliav.fitnessbot.bot.command;
+package ru.smaliav.fitnessbot.bot.command.action;
 
 import java.util.Objects;
 
-public enum Action {
+public enum Action implements IAction {
+
     SET,
     GET,
     REMOVE,

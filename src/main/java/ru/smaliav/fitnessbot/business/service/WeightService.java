@@ -1,21 +1,30 @@
 package ru.smaliav.fitnessbot.business.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.object.Weight;
 import ru.smaliav.fitnessbot.repository.WeightRepository;
+import ru.smaliav.fitnessbot.util.ChartHelper;
 import ru.smaliav.fitnessbot.util.Utils;
+import ru.smaliav.fitnessbot.util.WordDeclinationEnum;
+import ru.smaliav.fitnessbot.util.WordDeclinationHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class WeightService {
 
     private final WeightRepository weightRepository;
+
+    @Value("${fitnessbot.get-weights.max-months}")
+    private int maxMonths;
 
     @Autowired
     public WeightService(WeightRepository weightRepository) {
@@ -23,21 +32,32 @@ public class WeightService {
     }
 
     public String getWeightsByUserId(long userId) {
-        List<Weight> weights = weightRepository.getWeightsByUserId(userId);
-        StringBuilder res = new StringBuilder("Ваш вес за последние 3 месяца:\n");
+        List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
 
-        weights.forEach(weight -> {
-            res.append(weight.getDate().format(Utils.getDefaultDateFormat())).append("\t")
-                    .append(weight.getWeight()).append("\n");
-        });
+        StringBuilder res = new StringBuilder("Ваш вес за последние %d %s:\n"
+                .formatted(maxMonths, WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, maxMonths)));
+
+        if (weights.isEmpty()) {
+            res.append("Отсутствует");
+        } else {
+            weights.forEach(weight -> {
+                res.append(weight.getDate().format(Utils.getDefaultDateFormat())).append("\t")
+                        .append(weight.getValue()).append("\n");
+            });
+        }
 
         return res.toString();
+    }
+
+    public void getWeightsByUserIdWithChart(long userId) {
+        List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
+        ChartHelper.createTimeSeriesPlot(weights, userId);
     }
 
     public String getWeightByUserIdAndDate(long userId, String dateStr) {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         Weight weight = weightRepository.getWeightByUserIdAndDate(userId, date);
-        return weight == null ? "Вес не установлен" : weight.getWeight().toString();
+        return weight == null ? "Вес не установлен" : weight.getValue().toString();
     }
 
     @Transactional
@@ -73,7 +93,7 @@ public class WeightService {
         } else {
             weight.setModified(now);
         }
-        weight.setWeight(weightNum);
+        weight.setValue(weightNum);
         weight.setDate(date);
 
         return weightRepository.saveWeight(weight);

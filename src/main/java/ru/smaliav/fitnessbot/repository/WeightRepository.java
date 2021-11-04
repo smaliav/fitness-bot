@@ -27,6 +27,11 @@ public class WeightRepository {
         return weightMapper.e2bList(weightEntities);
     }
 
+    public List<Weight> getWeightsByUserIdLimited(long userId) {
+        List<WeightEntity> weightEntities = weightDao.getWeightsByUserIdLimited(userId);
+        return weightMapper.e2bList(weightEntities);
+    }
+
     public Weight getWeightByUserIdAndDate(long userId, LocalDate date) {
         WeightEntity weightEntity = weightDao.getWeightByUserIdAndDate(userId, date);
         return weightMapper.e2b(weightEntity);

@@ -17,7 +17,7 @@ public class WeightEntity extends ModifiedCreatedEntity {
     private UserEntity user;
 
     @Column(name = "weight", nullable = false)
-    private Double weight;
+    private Double value;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
