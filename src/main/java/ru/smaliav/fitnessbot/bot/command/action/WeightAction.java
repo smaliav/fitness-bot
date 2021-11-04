@@ -1,9 +1,10 @@
-package ru.smaliav.fitnessbot.bot.command;
+package ru.smaliav.fitnessbot.bot.command.action;
 
 import lombok.Getter;
 
 @Getter
-public enum WeightAction {
+public enum WeightAction implements IAction {
+
     SET_TODAY   (Action.SET.toString()),
     SET_DATE    (Action.SET.toString(), "date"),
     GET_LIMITED (Action.GET.toString()),
