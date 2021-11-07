@@ -26,18 +26,18 @@ public abstract class BaseCommand extends BotCommand {
         this.statsService = statsService;
     }
 
-    protected void sendMessage(AbsSender absSender, FitnessUser fUser, String commandName, String[] args, String text) {
-        String userName = Utils.extractUserName(fUser);
+    protected void sendMessage(AbsSender absSender, FitnessUser fitnessUser, String commandName, String[] args, String text) {
+        String userName = Utils.extractUserName(fitnessUser);
         log.info("Processing - user: {}, command: {} {}", userName, commandName, args);
 
         // Creating a message to send
         SendMessage message = new SendMessage();
         message.enableMarkdown(true);
-        message.setChatId(fUser.getChatId().toString());
+        message.setChatId(fitnessUser.getChatId().toString());
         message.setText(text);
 
         // In order to save Fitness Bot statistics
-        logUsedCommand(fUser);
+        logUsedCommand(fitnessUser);
 
         try {
             absSender.execute(message);
