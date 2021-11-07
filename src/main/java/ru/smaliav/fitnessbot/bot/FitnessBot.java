@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.smaliav.fitnessbot.bot.command.CommandStore;
+import ru.smaliav.fitnessbot.bot.command.core.BaseCommand;
 
 @Slf4j
 @Component
@@ -24,9 +25,9 @@ public class FitnessBot extends TelegramLongPollingCommandBot {
         this.botName = env.getProperty("BOT_NAME");
         this.botToken = env.getProperty("BOT_TOKEN");
 
-        register(commandStore.getStartCommand());
-        register(commandStore.getHelpCommand());
-        register(commandStore.getWeightCommand());
+        for (BaseCommand command : commandStore.getStore()) {
+            register(command);
+        }
     }
 
     @Override

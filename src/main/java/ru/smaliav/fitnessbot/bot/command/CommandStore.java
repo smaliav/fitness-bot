@@ -3,24 +3,34 @@ package ru.smaliav.fitnessbot.bot.command;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.smaliav.fitnessbot.bot.command.core.BaseCommand;
+import ru.smaliav.fitnessbot.bot.command.weight.GetWeightCommand;
+import ru.smaliav.fitnessbot.bot.command.weight.RemoveWeightCommand;
+import ru.smaliav.fitnessbot.bot.command.weight.SetWeightCommand;
+
+import java.util.List;
 
 @Getter
 @Component
 public class CommandStore {
 
-    private final StartCommand startCommand;
-    private final HelpCommand helpCommand;
-    private final WeightCommand weightCommand;
+    private final List<BaseCommand> store;
 
     @Autowired
     public CommandStore(
             StartCommand startCommand,
             HelpCommand helpCommand,
-            WeightCommand weightCommand
+            GetWeightCommand getWeightCommand,
+            SetWeightCommand setWeightCommand,
+            RemoveWeightCommand removeWeightCommand
     ) {
-        this.startCommand = startCommand;
-        this.helpCommand = helpCommand;
-        this.weightCommand = weightCommand;
+        store = List.of(
+                startCommand,
+                helpCommand,
+                getWeightCommand,
+                setWeightCommand,
+                removeWeightCommand
+        );
     }
 
 }

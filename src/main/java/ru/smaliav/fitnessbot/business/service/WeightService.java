@@ -31,8 +31,9 @@ public class WeightService {
         this.weightRepository = weightRepository;
     }
 
-    public String getWeightsByUserId(long userId) {
+    public String getWeightsByUserIdWithChart(long userId) {
         List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
+        ChartHelper.createTimeSeriesPlot(weights, userId);
 
         StringBuilder res = new StringBuilder("Ваш вес за последние %d %s:\n"
                 .formatted(maxMonths, WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, maxMonths)));
@@ -47,11 +48,6 @@ public class WeightService {
         }
 
         return res.toString();
-    }
-
-    public void getWeightsByUserIdWithChart(long userId) {
-        List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
-        ChartHelper.createTimeSeriesPlot(weights, userId);
     }
 
     public String getWeightByUserIdAndDate(long userId, String dateStr) {

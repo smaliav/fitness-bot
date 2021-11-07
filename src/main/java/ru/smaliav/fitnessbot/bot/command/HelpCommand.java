@@ -17,16 +17,17 @@ public class HelpCommand extends BaseInfoCommand {
     private static final String DESCRIPTION = "Shows possible commands";
     private static final String TEXT = """
             На данный момент доступен следующий набор команд:
-            /start - начинает диалог с Фитнес Ботом
             
-            /weight - команда управления весом, имеет следующие опции:
-            /weight set <вес> - устанавливает сегодняшний вес, например: /weight set 65.3
-            /weight set <вес> <дата> - устанавливает вес на определенную дату, например: /weight set 71.2 14.09.2021
-            /weight get - выводит ваш вес за последние 3 месяца
-            /weight remove <date> - удаляет запись за дату
-            /weight remove all - удаляет все записи
+            /get\\_weight - выводит вес за последнее время
+            /get\\_weight `<дата>` - выводит вес за дату
             
-            /help - выводит сообщение, которое вы сейчас видите""";
+            /set\\_weight `<вес>` - сохраняет сегодняшний вес
+            /set\\_weight `<вес>` `<дата>` - сохраняет вес за дату
+            
+            /rm\\_weight `<дата>` - удаляет запись за дату
+            /rm\\_weight `all` - удаляет все записи
+            
+            /help - выводит список команд""";
 
     private final UserService userService;
 
