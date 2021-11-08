@@ -1,7 +1,6 @@
 package ru.smaliav.fitnessbot.bot.command.core;
 
 import ru.smaliav.fitnessbot.bot.command.action.ActionResult;
-import ru.smaliav.fitnessbot.bot.command.action.IAction;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.exception.InvalidArgumentException;

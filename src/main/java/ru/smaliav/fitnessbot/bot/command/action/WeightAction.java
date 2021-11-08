@@ -1,34 +1,26 @@
 package ru.smaliav.fitnessbot.bot.command.action;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ru.smaliav.fitnessbot.bot.command.core.IAction;
 
 @Getter
+@AllArgsConstructor
 public enum WeightAction implements IAction {
 
-    SET_TODAY   (Action.SET.toString()),
-    SET_DATE    (Action.SET.toString(), "date"),
-    GET_LIMITED (Action.GET.toString()),
-    GET_DATE    (Action.GET.toString(), "date"),
-    REMOVE_DATE (Action.REMOVE.toString(), "date"),
-    REMOVE_ALL  (Action.REMOVE.toString(), "all"),
-    INVALID     ();
+    SET_TODAY,
+    SET_DATE,
+    GET_LIMITED,
+    GET_DATE,
+    REMOVE_DATE,
+    REMOVE_ALL   ("all"),
+    REMOVE_TODAY ("today"),
+    INVALID;
 
-    private final String arg1;
-    private final String arg2;
+    private final String arg;
 
     WeightAction() {
-        this.arg1 = null;
-        this.arg2 = null;
-    }
-
-    WeightAction(String arg1) {
-        this.arg1 = arg1;
-        this.arg2 = null;
-    }
-
-    WeightAction(String arg1, String arg2) {
-        this.arg1 = arg1;
-        this.arg2 = arg2;
+        arg = null;
     }
 
 }

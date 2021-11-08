@@ -2,6 +2,7 @@ package ru.smaliav.fitnessbot.bot.command.action;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.smaliav.fitnessbot.bot.command.core.IAction;
 
 @Getter @Setter
 public class ActionResult {

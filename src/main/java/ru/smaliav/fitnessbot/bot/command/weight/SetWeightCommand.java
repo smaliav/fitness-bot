@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.bot.command.action.ActionResult;
-import ru.smaliav.fitnessbot.bot.command.action.IAction;
+import ru.smaliav.fitnessbot.bot.command.core.IAction;
 import ru.smaliav.fitnessbot.bot.command.action.WeightAction;
 import ru.smaliav.fitnessbot.bot.command.core.BaseActionCommand;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
