@@ -25,6 +25,7 @@ public class HelpCommand extends BaseInfoCommand {
             /set\\_weight `<вес>` `<дата>` - сохраняет вес за дату
             
             /rm\\_weight `<дата>` - удаляет запись за дату
+            /rm\\_weight `today` - удаляет запись за сегодня
             /rm\\_weight `all` - удаляет все записи
             
             /help - выводит список команд""";

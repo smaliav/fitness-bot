@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.bot.command.action.ActionResult;
-import ru.smaliav.fitnessbot.bot.command.action.IAction;
+import ru.smaliav.fitnessbot.bot.command.core.IAction;
 import ru.smaliav.fitnessbot.bot.command.action.WeightAction;
 import ru.smaliav.fitnessbot.bot.command.core.BaseActionCommand;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
@@ -14,7 +14,9 @@ import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;
 import ru.smaliav.fitnessbot.business.service.WeightService;
 import ru.smaliav.fitnessbot.exception.InvalidArgumentException;
+import ru.smaliav.fitnessbot.util.Utils;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Component
@@ -47,6 +49,8 @@ public class RemoveWeightCommand extends BaseActionCommand {
         switch ((WeightAction) action) {
             case REMOVE_ALL -> text = weightService.removeAllWeightsByUserId(fitnessUser.getId());
             case REMOVE_DATE -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(), args[0]);
+            case REMOVE_TODAY -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(),
+                    LocalDate.now().format(Utils.getDefaultDateFormat()));
             default -> throw new InvalidArgumentException();
         }
 
@@ -58,8 +62,10 @@ public class RemoveWeightCommand extends BaseActionCommand {
 
         switch (args.length) {
             case 1 -> {
-                if (Objects.equals(args[0], "all")) {
+                if (Objects.equals(args[0], WeightAction.REMOVE_ALL.getArg())) {
                     resAction = WeightAction.REMOVE_ALL;
+                } else if (Objects.equals(args[0], WeightAction.REMOVE_TODAY.getArg())) {
+                    resAction = WeightAction.REMOVE_TODAY;
                 } else {
                     resAction = WeightAction.REMOVE_DATE;
                 }
