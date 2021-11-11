@@ -13,7 +13,6 @@ import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;
 import ru.smaliav.fitnessbot.business.service.WeightService;
-import ru.smaliav.fitnessbot.exception.InvalidArgumentException;
 import ru.smaliav.fitnessbot.util.Utils;
 
 import java.time.LocalDate;
@@ -51,7 +50,7 @@ public class RemoveWeightCommand extends BaseActionCommand {
             case REMOVE_DATE -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(), args[0]);
             case REMOVE_TODAY -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(),
                     LocalDate.now().format(Utils.getDefaultDateFormat()));
-            default -> throw new InvalidArgumentException();
+            default -> throw new IllegalArgumentException();
         }
 
         return new ActionResult(text, action);

@@ -39,7 +39,7 @@ public class WeightService {
                 .formatted(maxMonths, WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, maxMonths)));
 
         if (weights.isEmpty()) {
-            res.append("Отсутствует");
+            res.append("Записи отсутствуют");
         } else {
             weights.forEach(weight -> {
                 res.append(weight.getDate().format(Utils.getDefaultDateFormat())).append("\t")
@@ -76,7 +76,7 @@ public class WeightService {
 
     @Transactional
     public Weight saveWeight(FitnessUser fitnessUser, String weightStr, String dateStr) {
-        Double weightNum = Utils.parseDouble(weightStr);
+        Double weightNum = Utils.parseWeight(weightStr);
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         LocalDateTime now = LocalDateTime.now();
 

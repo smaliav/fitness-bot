@@ -13,7 +13,6 @@ import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;
 import ru.smaliav.fitnessbot.business.service.WeightService;
-import ru.smaliav.fitnessbot.exception.InvalidArgumentException;
 import ru.smaliav.fitnessbot.util.ChartHelper;
 
 import java.io.File;
@@ -52,7 +51,7 @@ public class GetWeightCommand extends BaseActionCommand {
         switch ((WeightAction) action) {
             case GET_LIMITED -> text = weightService.getWeightsByUserIdWithChart(fitnessUser.getId());
             case GET_DATE -> text = weightService.getWeightByUserIdAndDate(fitnessUser.getId(), args[0]);
-            default -> throw new InvalidArgumentException();
+            default -> throw new IllegalArgumentException();
         }
 
         return new ActionResult(text, action);
