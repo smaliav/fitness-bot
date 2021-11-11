@@ -15,7 +15,6 @@ import ru.smaliav.fitnessbot.business.object.Weight;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;
 import ru.smaliav.fitnessbot.business.service.WeightService;
-import ru.smaliav.fitnessbot.exception.InvalidArgumentException;
 import ru.smaliav.fitnessbot.util.Utils;
 
 @Component
@@ -56,7 +55,7 @@ public class SetWeightCommand extends BaseActionCommand {
                 text = "Вес за " + weight.getDate().format(Utils.getDefaultDateFormat())
                         + " был успешно сохранен!";
             }
-            default -> throw new InvalidArgumentException();
+            default -> throw new IllegalArgumentException();
         }
 
         return new ActionResult(text, action);
