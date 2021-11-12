@@ -1,22 +1,11 @@
 package ru.smaliav.fitnessbot.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
-import ru.smaliav.fitnessbot.business.service.WeightSettings;
 
 import java.time.format.DateTimeFormatter;
 
-@Component
-public class Utils {
-
-    private static WeightSettings weightSettings;
-
-    @Autowired
-    private Utils(WeightSettings weightSettings) {
-        Utils.weightSettings = weightSettings;
-    }
+public abstract class Utils {
 
     public static String extractUserName(User user) {
         return (user.getUserName() != null) ? user.getUserName() :
@@ -35,18 +24,6 @@ public class Utils {
     public static Double parseDouble(String str) {
         String doubleStr = str.replaceAll(",", "\\.");
         return Double.parseDouble(doubleStr);
-    }
-
-    public static Double parseWeight(String str) {
-        Double res = parseDouble(str);
-
-        if (Double.compare(res, weightSettings.getMaxWeight()) > 0) {
-            throw new IllegalArgumentException("Вы ввели слишком большой вес!");
-        } else if (Double.compare(weightSettings.getMinWeight(), res) != -1) {
-            throw new IllegalArgumentException("Вы ввели слишком маленький вес!");
-        }
-
-        return res;
     }
 
 }

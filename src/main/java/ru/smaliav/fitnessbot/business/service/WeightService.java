@@ -21,13 +21,15 @@ import java.util.List;
 @Service
 public class WeightService {
 
+    private final WeightSettings weightSettings;
     private final WeightRepository weightRepository;
 
     @Value("${fitnessbot.get-weights.max-months}")
     private int maxMonths;
 
     @Autowired
-    public WeightService(WeightRepository weightRepository) {
+    public WeightService(WeightRepository weightRepository, WeightSettings weightSettings) {
+        this.weightSettings = weightSettings;
         this.weightRepository = weightRepository;
     }
 
@@ -76,7 +78,7 @@ public class WeightService {
 
     @Transactional
     public Weight saveWeight(FitnessUser fitnessUser, String weightStr, String dateStr) {
-        Double weightNum = Utils.parseWeight(weightStr);
+        Double weightNum = parseWeight(weightStr);
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         LocalDateTime now = LocalDateTime.now();
 
@@ -93,6 +95,18 @@ public class WeightService {
         weight.setDate(date);
 
         return weightRepository.saveWeight(weight);
+    }
+
+    public Double parseWeight(String str) {
+        Double res = Utils.parseDouble(str);
+
+        if (Double.compare(res, weightSettings.getMaxWeight()) > 0) {
+            throw new IllegalArgumentException("Вы ввели слишком большой вес!");
+        } else if (Double.compare(weightSettings.getMinWeight(), res) != -1) {
+            throw new IllegalArgumentException("Вы ввели слишком маленький вес!");
+        }
+
+        return res;
     }
 
 }
