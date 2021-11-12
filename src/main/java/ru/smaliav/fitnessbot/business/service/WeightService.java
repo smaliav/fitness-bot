@@ -97,7 +97,7 @@ public class WeightService {
         return weightRepository.saveWeight(weight);
     }
 
-    public Double parseWeight(String str) {
+    private Double parseWeight(String str) {
         Double res = Utils.parseDouble(str);
 
         if (Double.compare(res, weightSettings.getMaxWeight()) > 0) {

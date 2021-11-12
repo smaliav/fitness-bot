@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 public abstract class Utils {
 
+    public static final String DATE_PATTERN = "dd.MM.yyyy";
+
     public static String extractUserName(User user) {
         return (user.getUserName() != null) ? user.getUserName() :
                 String.format("%s %s", user.getFirstName(), user.getLastName());
@@ -18,7 +20,7 @@ public abstract class Utils {
     }
 
     public static DateTimeFormatter getDefaultDateFormat() {
-        return DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return DateTimeFormatter.ofPattern(DATE_PATTERN);
     }
 
     public static Double parseDouble(String str) {
