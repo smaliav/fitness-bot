@@ -1,22 +1,14 @@
 package ru.smaliav.fitnessbot.repository.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.smaliav.fitnessbot.repository.dao.core.BaseDao;
 import ru.smaliav.fitnessbot.repository.entity.UserEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class UserDao {
-
-    @PersistenceContext
-    private final EntityManager em;
-
-    public UserDao(EntityManager em) {
-        this.em = em;
-    }
+public class UserDao extends BaseDao<UserEntity> {
 
     public UserEntity getUserByTelegramId(Long id) {
         TypedQuery<UserEntity> query = em.createQuery("" +
@@ -37,16 +29,6 @@ public class UserDao {
         );
 
         return query.getResultList();
-    }
-
-    // TODO smaliy-av Implement parent DAO
-    public UserEntity saveOrUpdate(UserEntity entity) {
-        if (entity.getId() == null) {
-            em.persist(entity);
-            return entity;
-        } else {
-            return em.merge(entity);
-        }
     }
 
 }

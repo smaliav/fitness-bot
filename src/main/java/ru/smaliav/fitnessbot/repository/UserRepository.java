@@ -3,6 +3,7 @@ package ru.smaliav.fitnessbot.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
+import ru.smaliav.fitnessbot.mapper.IdCycleAvoidingContext;
 import ru.smaliav.fitnessbot.mapper.UserMapper;
 import ru.smaliav.fitnessbot.repository.dao.UserDao;
 import ru.smaliav.fitnessbot.repository.entity.UserEntity;
@@ -23,7 +24,7 @@ public class UserRepository {
 
     public FitnessUser getUserByTelegramId(Long tId) {
         UserEntity entity = userDao.getUserByTelegramId(tId);
-        return userMapper.e2b(entity);
+        return userMapper.e2b(entity, new IdCycleAvoidingContext());
     }
 
     public List<UserEntity> getUsers() {
@@ -31,9 +32,9 @@ public class UserRepository {
     }
 
     public FitnessUser saveOrUpdateUser(FitnessUser fUser) {
-        UserEntity entity = userMapper.b2e(fUser);
+        UserEntity entity = userMapper.b2e(fUser, new IdCycleAvoidingContext());
         entity = userDao.saveOrUpdate(entity);
-        return userMapper.e2b(entity);
+        return userMapper.e2b(entity, new IdCycleAvoidingContext());
     }
 
 }

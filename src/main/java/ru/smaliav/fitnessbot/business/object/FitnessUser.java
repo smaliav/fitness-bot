@@ -5,6 +5,7 @@ import lombok.Setter;
 import ru.smaliav.fitnessbot.business.object.core.ModifiedCreatedBusinessObject;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter @Setter
 public class FitnessUser extends ModifiedCreatedBusinessObject {
@@ -15,5 +16,8 @@ public class FitnessUser extends ModifiedCreatedBusinessObject {
     private String secondName;
     private Long chatId;
     private LocalDateTime lastUsed;
+
+    private Set<Weight> weights;
+    private Set<Report> reports;
 
 }

@@ -37,4 +37,7 @@ public class UserEntity extends ModifiedCreatedEntity {
     @OneToMany(mappedBy = "user")
     private Set<WeightEntity> weights;
 
+    @OneToMany(mappedBy = "user")
+    private Set<ReportEntity> reports;
+
 }

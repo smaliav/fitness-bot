@@ -50,7 +50,7 @@ public class GetWeightCommand extends BaseActionCommand {
 
         switch ((WeightAction) action) {
             case GET_LIMITED -> text = weightService.getWeightsByUserIdWithChart(fitnessUser.getId());
-            case GET_DATE -> text = weightService.getWeightByUserIdAndDate(fitnessUser.getId(), args[0]);
+            case GET_DATE -> text = weightService.getWeightByUserAndDate(fitnessUser.getId(), args[0]);
             default -> throw new IllegalArgumentException();
         }
 
