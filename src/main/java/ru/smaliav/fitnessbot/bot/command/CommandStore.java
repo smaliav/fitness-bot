@@ -22,14 +22,16 @@ public class CommandStore {
             HelpCommand helpCommand,
             GetWeightCommand getWeightCommand,
             SetWeightCommand setWeightCommand,
-            RemoveWeightCommand removeWeightCommand
+            RemoveWeightCommand removeWeightCommand,
+            ReportCommand reportCommand
     ) {
         store = List.of(
                 startCommand,
                 helpCommand,
                 getWeightCommand,
                 setWeightCommand,
-                removeWeightCommand
+                removeWeightCommand,
+                reportCommand
         );
     }
 

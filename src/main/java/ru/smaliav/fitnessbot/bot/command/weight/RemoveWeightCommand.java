@@ -46,9 +46,9 @@ public class RemoveWeightCommand extends BaseActionCommand {
         String text;
 
         switch ((WeightAction) action) {
-            case REMOVE_ALL -> text = weightService.removeAllWeightsByUserId(fitnessUser.getId());
-            case REMOVE_DATE -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(), args[0]);
-            case REMOVE_TODAY -> text = weightService.removeWeightByUserIdAndDate(fitnessUser.getId(),
+            case REMOVE_ALL -> text = weightService.removeAllWeightsByUser(fitnessUser);
+            case REMOVE_DATE -> text = weightService.removeWeightByUserAndDate(fitnessUser, args[0]);
+            case REMOVE_TODAY -> text = weightService.removeWeightByUserAndDate(fitnessUser,
                     LocalDate.now().format(Utils.getDefaultDateFormat()));
             default -> throw new IllegalArgumentException();
         }

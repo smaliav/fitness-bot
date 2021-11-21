@@ -33,6 +33,7 @@ public class WeightService {
         this.weightRepository = weightRepository;
     }
 
+    @Transactional
     public String getWeightsByUserIdWithChart(long userId) {
         List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
         ChartHelper.createTimeSeriesPlot(weights, userId);
@@ -52,23 +53,38 @@ public class WeightService {
         return res.toString();
     }
 
-    public String getWeightByUserIdAndDate(long userId, String dateStr) {
+    @Transactional
+    public String getWeightByUserAndDate(long userId, String dateStr) {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         Weight weight = weightRepository.getWeightByUserIdAndDate(userId, date);
         return weight == null ? "Вес не установлен" : weight.getValue().toString();
     }
 
     @Transactional
-    public String removeWeightByUserIdAndDate(long userId, String dateStr) {
+    public String removeWeightByUserAndDate(FitnessUser fitnessUser, String dateStr) {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
-        int deletedCnt = weightRepository.removeWeightByUserIdAndDate(userId, date);
-        return (deletedCnt > 0) ? "Запись успешно удалена" : "Такой записи не существует";
+        String res;
+
+        boolean isRemoved = weightRepository.removeWeightByUserIdAndDate(fitnessUser.getId(), date);
+
+        if (isRemoved) {
+            fitnessUser.getWeights().removeIf(w -> w.getDate().equals(date));
+            res = "Запись успешно удалена";
+        } else {
+            res = "Такой записи не существует";
+        }
+
+        return res;
     }
 
     @Transactional
-    public String removeAllWeightsByUserId(long userId) {
-        int deletedCnt = weightRepository.removeAllWeightsByUserId(userId);
-        return "Записей удалено: " + deletedCnt;
+    public String removeAllWeightsByUser(FitnessUser fitnessUser) {
+        int weightsCnt = fitnessUser.getWeights().size();
+
+        weightRepository.removeAllWeightsByUserId(fitnessUser.getId());
+        fitnessUser.getWeights().clear();
+
+        return "Записей удалено: " + weightsCnt;
     }
 
     @Transactional

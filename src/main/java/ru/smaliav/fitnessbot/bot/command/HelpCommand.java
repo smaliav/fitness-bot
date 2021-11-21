@@ -28,6 +28,7 @@ public class HelpCommand extends BaseInfoCommand {
             /rm\\_weight `today` - удаляет запись за сегодня
             /rm\\_weight `all` - удаляет все записи
             
+            /report `<текст>` - отправить отзыв/пожелания
             /help - выводит список команд""";
 
     private final UserService userService;
