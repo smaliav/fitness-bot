@@ -21,5 +21,4 @@ public class StatsService {
         fitnessUser.setLastUsed(LocalDateTime.now());
         userRepository.saveOrUpdateUser(fitnessUser);
     }
-
 }

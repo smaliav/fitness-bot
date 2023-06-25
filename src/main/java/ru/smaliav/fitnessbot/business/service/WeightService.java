@@ -1,14 +1,14 @@
 package ru.smaliav.fitnessbot.business.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.object.Weight;
 import ru.smaliav.fitnessbot.repository.WeightRepository;
-import ru.smaliav.fitnessbot.util.ChartHelper;
+import ru.smaliav.fitnessbot.util.chart.ChartHelper;
 import ru.smaliav.fitnessbot.util.Utils;
 import ru.smaliav.fitnessbot.util.WordDeclinationEnum;
 import ru.smaliav.fitnessbot.util.WordDeclinationHelper;
@@ -18,25 +18,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class WeightService {
 
-    private final WeightSettings weightSettings;
+    private final WeightSettings settings;
     private final WeightRepository weightRepository;
+    private final ChartHelper chartHelper;
 
     @Value("${fitnessbot.get-weights.max-months}")
     private int maxMonths;
 
-    @Autowired
-    public WeightService(WeightRepository weightRepository, WeightSettings weightSettings) {
-        this.weightSettings = weightSettings;
-        this.weightRepository = weightRepository;
-    }
-
     @Transactional
     public String getWeightsByUserIdWithChart(long userId) {
         List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
-        ChartHelper.createTimeSeriesPlot(weights, userId);
+        chartHelper.createTimeSeriesPlot(weights, userId);
 
         StringBuilder res = new StringBuilder("Ваш вес за последние %d %s:\n"
                 .formatted(maxMonths, WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, maxMonths)));
@@ -44,10 +40,10 @@ public class WeightService {
         if (weights.isEmpty()) {
             res.append("Записи отсутствуют");
         } else {
-            weights.forEach(weight -> {
+            weights.forEach(weight ->
                 res.append(weight.getDate().format(Utils.getDefaultDateFormat())).append("\t")
-                        .append(weight.getValue()).append("\n");
-            });
+                        .append(weight.getValue()).append("\n")
+            );
         }
 
         return res.toString();
@@ -116,9 +112,9 @@ public class WeightService {
     private Double parseWeight(String str) {
         Double res = Utils.parseDouble(str);
 
-        if (Double.compare(res, weightSettings.getMaxWeight()) > 0) {
+        if (Double.compare(res, settings.getMaxWeight()) > 0) {
             throw new IllegalArgumentException("Вы ввели слишком большой вес!");
-        } else if (Double.compare(weightSettings.getMinWeight(), res) != -1) {
+        } else if (Double.compare(settings.getMinWeight(), res) != -1) {
             throw new IllegalArgumentException("Вы ввели слишком маленький вес!");
         }
 

@@ -26,5 +26,4 @@ public class ReportService {
 
         return "Спасибо! Ваш отзыв (№%d) был сохранен.".formatted(report.getId());
     }
-
 }

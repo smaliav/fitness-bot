@@ -1,19 +1,18 @@
 package ru.smaliav.fitnessbot.bot.command.weight;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.smaliav.fitnessbot.bot.command.action.ActionResult;
-import ru.smaliav.fitnessbot.bot.command.core.IAction;
 import ru.smaliav.fitnessbot.bot.command.action.WeightAction;
 import ru.smaliav.fitnessbot.bot.command.core.BaseActionCommand;
+import ru.smaliav.fitnessbot.bot.command.core.IAction;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.service.StatsService;
 import ru.smaliav.fitnessbot.business.service.UserService;
 import ru.smaliav.fitnessbot.business.service.WeightService;
-import ru.smaliav.fitnessbot.util.ChartHelper;
+import ru.smaliav.fitnessbot.util.chart.ChartHelper;
 
 import java.io.File;
 
@@ -25,12 +24,18 @@ public class GetWeightCommand extends BaseActionCommand {
 
     private final UserService userService;
     private final WeightService weightService;
+    private final ChartHelper chartHelper;
 
-    @Autowired
-    public GetWeightCommand(UserService userService, WeightService weightService, StatsService statsService) {
+    public GetWeightCommand(
+        UserService userService,
+        WeightService weightService,
+        StatsService statsService,
+        ChartHelper chartHelper
+    ) {
         super(ID, DESCRIPTION, statsService);
         this.userService = userService;
         this.weightService = weightService;
+        this.chartHelper = chartHelper;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class GetWeightCommand extends BaseActionCommand {
         sendMessage(absSender, fitnessUser, ID, arguments, actionResult.getText());
 
         if (actionResult.isSuccess() && (actionResult.getAction() == WeightAction.GET_LIMITED)) {
-            sendPhoto(absSender, fitnessUser, new File(ChartHelper.getChartLocation(fitnessUser.getId())));
+            sendPhoto(absSender, fitnessUser, new File(chartHelper.getChartLocation(fitnessUser.getId())));
         }
     }
 

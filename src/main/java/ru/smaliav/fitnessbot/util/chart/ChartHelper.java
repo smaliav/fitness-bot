@@ -1,5 +1,6 @@
-package ru.smaliav.fitnessbot.util;
+package ru.smaliav.fitnessbot.util.chart;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -12,8 +13,11 @@ import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.springframework.stereotype.Component;
 import ru.smaliav.fitnessbot.business.object.core.ITimedMetric;
+import ru.smaliav.fitnessbot.util.Utils;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -24,34 +28,40 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Slf4j
-public abstract class ChartHelper {
+@Component
+public class ChartHelper {
 
-    public static final String EXT = "png";
+    private final ChartSettings settings;
 
-    private static final String FONT_NAME = "Arial";
-    private static final int FONT_SIZE = 14;
-    private static final float ALPHA = 0.15f;
-    private static final String WATERMARK = "@FitnessProgressBot";
+    private Font DEFAULT_PLAIN_FONT;
+    private Font DEFAULT_BOLD_FONT;
+    private Font WATERMARK_FONT;
 
-    private static final Font DEFAULT_PLAIN_FONT = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE);
-    private static final Font DEFAULT_BOLD_FONT = new Font(FONT_NAME, Font.BOLD, FONT_SIZE);
-    private static final Font WATERMARK_FONT = new Font(FONT_NAME, Font.BOLD, 30);
+    @PostConstruct
+    protected void postConstruct() {
+        DEFAULT_PLAIN_FONT = new Font(settings.getFont(), Font.PLAIN, settings.getFontSize());
+        DEFAULT_BOLD_FONT = new Font(settings.getFont(), Font.BOLD, settings.getFontSize());
+        WATERMARK_FONT = new Font(settings.getFont(), Font.BOLD, settings.getWatermarkFontSize());
+    }
 
-    public static void createTimeSeriesPlot(Collection<? extends ITimedMetric> data, long userId) {
+    public void createTimeSeriesPlot(Collection<? extends ITimedMetric> data, long userId) {
         TimeSeries timeSeries = new TimeSeries("Progress");
 
-        data.forEach(weight -> {
-            timeSeries.add(new Day(Date.from(weight.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant())), weight.getValue());
-        });
+        data.forEach(weight ->
+            timeSeries.add(
+                new Day(Date.from(weight.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant())), weight.getValue()
+            )
+        );
 
         TimeSeriesCollection timeSeriesCollection = new TimeSeriesCollection();
         timeSeriesCollection.addSeries(timeSeries);
 
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "",
-                "Дата",
-                "Вес",
+                settings.getTitle(),
+                settings.getTimeAxisLabel(),
+                settings.getValueAxisLabel(),
                 timeSeriesCollection,
                 false,
                 false,
@@ -89,33 +99,32 @@ public abstract class ChartHelper {
 
         addWatermark(image);
         try {
-            ImageIO.write(image, EXT, outputFile);
+            ImageIO.write(image, settings.getExtension(), outputFile);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    private static void addWatermark(BufferedImage image) {
+    private void addWatermark(BufferedImage image) {
         Graphics2D graphics2D = image.createGraphics();
 
-        AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, ALPHA);
+        AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, settings.getWatermarkAlpha());
         graphics2D.setComposite(alphaComposite);
         graphics2D.setColor(Color.lightGray);
         graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics2D.setFont(WATERMARK_FONT);
 
         FontMetrics fontMetrics = graphics2D.getFontMetrics();
-        Rectangle2D rectangle2D = fontMetrics.getStringBounds(WATERMARK, graphics2D);
+        Rectangle2D rectangle2D = fontMetrics.getStringBounds(settings.getWatermarkText(), graphics2D);
 
         int centerX = (image.getWidth() - (int) rectangle2D.getWidth()) / 2;
         int centerY = (image.getHeight() - (int) rectangle2D.getHeight()) / 2;
 
-        graphics2D.drawString(WATERMARK, centerX, centerY);
+        graphics2D.drawString(settings.getWatermarkText(), centerX, centerY);
         graphics2D.dispose();
     }
 
-    public static String getChartLocation(long userId) {
-        return "./charts/chart-%d.%s".formatted(userId, EXT);
+    public String getChartLocation(long userId) {
+        return "./charts/chart-%d.%s".formatted(userId, settings.getExtension());
     }
-
 }
