@@ -73,5 +73,4 @@ public class GetWeightCommand extends BaseActionCommand {
 
         return resAction;
     }
-
 }
