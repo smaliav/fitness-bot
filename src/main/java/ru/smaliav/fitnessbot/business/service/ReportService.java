@@ -1,19 +1,20 @@
 package ru.smaliav.fitnessbot.business.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.object.Report;
+import ru.smaliav.fitnessbot.mapper.IdCycleAvoidingContext;
+import ru.smaliav.fitnessbot.mapper.ReportMapper;
 import ru.smaliav.fitnessbot.repository.ReportRepository;
 
+@RequiredArgsConstructor
 @Service
 public class ReportService {
 
-    private final ReportRepository reportRepository;
-
-    public ReportService(ReportRepository reportRepository) {
-        this.reportRepository = reportRepository;
-    }
+    private final ReportRepository repository;
+    private final ReportMapper mapper;
 
     @Transactional
     public String saveReport(FitnessUser fitnessUser, String[] args) {
@@ -22,8 +23,7 @@ public class ReportService {
         String reportStr = String.join(" ", args);
         Report report = new Report(fitnessUser, reportStr);
 
-        report = reportRepository.saveReport(report);
-
-        return "Спасибо! Ваш отзыв (№%d) был сохранен.".formatted(report.getId());
+        var reportEntity = repository.save(mapper.b2e(report, new IdCycleAvoidingContext()));
+        return "Спасибо! Ваш отзыв (№%d) был сохранен.".formatted(reportEntity.getId());
     }
 }

@@ -44,5 +44,4 @@ public class HelpCommand extends BaseInfoCommand {
         FitnessUser fitnessUser = userService.registerOrUpdate(user, chat);
         sendMessage(absSender, fitnessUser, ID, arguments, TEXT);
     }
-
 }

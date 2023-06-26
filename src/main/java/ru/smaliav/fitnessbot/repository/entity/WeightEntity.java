@@ -21,5 +21,4 @@ public class WeightEntity extends ModifiedCreatedEntity {
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
-
 }

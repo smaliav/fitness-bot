@@ -20,5 +20,4 @@ public abstract class BaseCycleAvoidingContext {
     public void storeMappedInstance(Object src, @MappingTarget Object target) {
         knownObjects.put(src, target);
     }
-
 }

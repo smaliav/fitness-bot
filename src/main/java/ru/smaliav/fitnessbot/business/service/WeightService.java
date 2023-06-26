@@ -2,20 +2,20 @@ package ru.smaliav.fitnessbot.business.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
 import ru.smaliav.fitnessbot.business.object.Weight;
+import ru.smaliav.fitnessbot.mapper.IdCycleAvoidingContext;
+import ru.smaliav.fitnessbot.mapper.WeightMapper;
 import ru.smaliav.fitnessbot.repository.WeightRepository;
-import ru.smaliav.fitnessbot.util.chart.ChartHelper;
 import ru.smaliav.fitnessbot.util.Utils;
 import ru.smaliav.fitnessbot.util.WordDeclinationEnum;
 import ru.smaliav.fitnessbot.util.WordDeclinationHelper;
+import ru.smaliav.fitnessbot.util.chart.ChartHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,19 +23,20 @@ import java.util.List;
 public class WeightService {
 
     private final WeightSettings settings;
-    private final WeightRepository weightRepository;
+    private final WeightRepository repository;
     private final ChartHelper chartHelper;
-
-    @Value("${fitnessbot.get-weights.max-months}")
-    private int maxMonths;
+    private final WeightMapper mapper;
 
     @Transactional
     public String getWeightsByUserIdWithChart(long userId) {
-        List<Weight> weights = weightRepository.getWeightsByUserIdLimited(userId);
+        var weightEntities = repository.findWeightEntitiesByUserIdAndDateGreaterThan(userId,
+            LocalDate.now().minusMonths(settings.getMaxMonths()));
+        var weights = mapper.e2bList(weightEntities, new IdCycleAvoidingContext());
         chartHelper.createTimeSeriesPlot(weights, userId);
 
-        StringBuilder res = new StringBuilder("Ваш вес за последние %d %s:\n"
-                .formatted(maxMonths, WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, maxMonths)));
+        StringBuilder res = new StringBuilder("Ваш вес за последние %d %s:\n".formatted(
+            settings.getMaxMonths(),
+            WordDeclinationHelper.getDeclination(WordDeclinationEnum.MONTH, settings.getMaxMonths())));
 
         if (weights.isEmpty()) {
             res.append("Записи отсутствуют");
@@ -52,7 +53,8 @@ public class WeightService {
     @Transactional
     public String getWeightByUserAndDate(long userId, String dateStr) {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
-        Weight weight = weightRepository.getWeightByUserIdAndDate(userId, date);
+        var weightEntity = repository.findWeightEntityByUserIdAndDate(userId, date);
+        var weight = mapper.e2b(weightEntity, new IdCycleAvoidingContext());
         return weight == null ? "Вес не установлен" : weight.getValue().toString();
     }
 
@@ -61,9 +63,9 @@ public class WeightService {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         String res;
 
-        boolean isRemoved = weightRepository.removeWeightByUserIdAndDate(fitnessUser.getId(), date);
+        int removedCnt = repository.deleteAllByUserIdAndDate(fitnessUser.getId(), date);
 
-        if (isRemoved) {
+        if (removedCnt > 0) {
             fitnessUser.getWeights().removeIf(w -> w.getDate().equals(date));
             res = "Запись успешно удалена";
         } else {
@@ -75,12 +77,9 @@ public class WeightService {
 
     @Transactional
     public String removeAllWeightsByUser(FitnessUser fitnessUser) {
-        int weightsCnt = fitnessUser.getWeights().size();
-
-        weightRepository.removeAllWeightsByUserId(fitnessUser.getId());
+        var removedCnt = repository.deleteAllByUserId(fitnessUser.getId());
         fitnessUser.getWeights().clear();
-
-        return "Записей удалено: " + weightsCnt;
+        return "Записей удалено: " + removedCnt;
     }
 
     @Transactional
@@ -94,7 +93,8 @@ public class WeightService {
         LocalDate date = LocalDate.parse(dateStr, Utils.getDefaultDateFormat());
         LocalDateTime now = LocalDateTime.now();
 
-        Weight weight = weightRepository.getWeightByUserIdAndDate(fitnessUser.getId(), date);
+        var weightEntity = repository.findWeightEntityByUserIdAndDate(fitnessUser.getId(), date);
+        var weight = mapper.e2b(weightEntity, new IdCycleAvoidingContext());
 
         if (weight == null) {
             weight = new Weight();
@@ -106,7 +106,8 @@ public class WeightService {
         weight.setValue(weightNum);
         weight.setDate(date);
 
-        return weightRepository.saveWeight(weight);
+        weightEntity = repository.save(mapper.b2e(weight, new IdCycleAvoidingContext()));
+        return mapper.e2b(weightEntity, new IdCycleAvoidingContext());
     }
 
     private Double parseWeight(String str) {
@@ -120,5 +121,4 @@ public class WeightService {
 
         return res;
     }
-
 }

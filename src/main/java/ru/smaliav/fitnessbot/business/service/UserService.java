@@ -1,43 +1,44 @@
 package ru.smaliav.fitnessbot.business.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.smaliav.fitnessbot.business.object.FitnessUser;
+import ru.smaliav.fitnessbot.mapper.IdCycleAvoidingContext;
+import ru.smaliav.fitnessbot.mapper.UserMapper;
 import ru.smaliav.fitnessbot.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserMapper userMapper;
 
     @Transactional
     public FitnessUser registerOrUpdate(User tUser, Chat chat) {
-        FitnessUser fUser = userRepository.getUserByTelegramId(tUser.getId());
+        var userEntity = userRepository.findUserEntityByTelegramId(tUser.getId());
 
-        if (fUser != null) {
+        FitnessUser fUser;
+        if (userEntity != null) {
+            fUser = userMapper.e2b(userEntity, new IdCycleAvoidingContext());
             updateUserInfo(tUser, chat, fUser);
         } else {
             fUser = registerUser(tUser, chat);
         }
 
-        return userRepository.saveOrUpdateUser(fUser);
+        userEntity = userRepository.save(userMapper.b2e(fUser, new IdCycleAvoidingContext()));
+        return userMapper.e2b(userEntity, new IdCycleAvoidingContext());
     }
 
     private void updateUserInfo(User tUser, Chat chat, FitnessUser fUser) {
         boolean wasModified = false;
 
-        // TODO smaliy-av Refactor
         if (!Objects.equals(fUser.getNickname(), tUser.getUserName())) {
             fUser.setNickname(tUser.getUserName());
             wasModified = true;
@@ -72,5 +73,4 @@ public class UserService {
 
         return fUser;
     }
-
 }

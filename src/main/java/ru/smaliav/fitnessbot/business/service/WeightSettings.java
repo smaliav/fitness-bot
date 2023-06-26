@@ -14,4 +14,6 @@ public class WeightSettings {
     @Value("${fitnessbot.max-weight}")
     private Double maxWeight;
 
+    @Value("${fitnessbot.get-weights.max-months}")
+    private int maxMonths;
 }
