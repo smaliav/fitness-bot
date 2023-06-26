@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 public abstract class EntityConstructorUtil {
 
-    public static ReportEntity reportEntity(Long id, String text, UserEntity userEntity) {
+    public static ReportEntity reportEntity(int id, String text, UserEntity userEntity) {
         var reportEntity = new ReportEntity();
-        reportEntity.setId(id);
+        reportEntity.setId((long) id);
         reportEntity.setText(text);
         reportEntity.setStatus(ReportStatus.NEW);
         reportEntity.setCreated(LocalDateTime.now());
@@ -18,9 +18,9 @@ public abstract class EntityConstructorUtil {
         return reportEntity;
     }
 
-    public static UserEntity userEntity(Long id) {
+    public static UserEntity userEntity(int id) {
         var userEntity = new UserEntity();
-        userEntity.setId(id);
+        userEntity.setId((long) id);
         userEntity.setTelegramId(1L);
         userEntity.setChatId(1L);
         userEntity.setCreated(LocalDateTime.now());

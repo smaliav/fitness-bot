@@ -31,12 +31,12 @@ public class ReportServiceTest extends BaseTest {
             reportMapper
         );
 
-        userRepository.save(userEntity(1L));
+        userRepository.save(userEntity(1));
     }
 
     @Test
     public void givenCorrectReport_whenSaveReport_thenSaveAndReturnSuccessComment() {
-        var fitnessUser = fitnessUser(1L);
+        var fitnessUser = fitnessUser(1);
 
         String comment = reportService.saveReport(fitnessUser, new String[]{"Report"});
 
@@ -46,7 +46,7 @@ public class ReportServiceTest extends BaseTest {
 
     @Test
     public void givenEmptyReport_whenSaveReport_thenThrow() {
-        var fitnessUser = fitnessUser(1L);
+        var fitnessUser = fitnessUser(1);
 
         assertThrows(IllegalArgumentException.class, () ->
             reportService.saveReport(fitnessUser, new String[]{})
